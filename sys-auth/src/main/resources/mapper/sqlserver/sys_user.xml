@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.greelee.auth.dao.SysUserDao">
+    <resultMap type="com.greelee.auth.model.SysUserDO" id="commonMap">
+        <result column="id" property="id"/>
+        <result column="ad_account" property="adAccount"/>
+        <result column="email" property="email"/>
+        <result column="mobile" property="mobile"/>
+        <result column="password" property="password"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="user_id" property="userId"/>
+        <result column="username" property="username"/>
+        <result column="corp_id" property="corpId"/>
+        <result column="headship" property="headship"/>
+        <result column="enabled" property="enabled"/>
+        <result column="memo" property="memo"/>
+        <result column="is_admin" property="isAdmin"/>
+        <result column="level" property="level"/>
+        <result column="work_time" property="workTime"/>
+        <result column="sex" property="sex"/>
+        <result column="corp_name" property="corpName"/>
+    </resultMap>
+
+    <resultMap id="sysUserVOMap" type="com.greelee.auth.model.SysUserVO">
+        <result column="id" property="id"/>
+        <result column="ad_account" property="adAccount"/>
+        <result column="email" property="email"/>
+        <result column="mobile" property="mobile"/>
+        <result column="password" property="password"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="user_id" property="userId"/>
+        <result column="username" property="username"/>
+        <result column="corp_id" property="corpId"/>
+        <result column="headship" property="headship"/>
+        <result column="enabled" property="enabled"/>
+        <result column="memo" property="memo"/>
+        <result column="is_admin" property="isAdmin"/>
+        <result column="level" property="level"/>
+        <result column="work_time" property="workTime"/>
+        <result column="sex" property="sex"/>
+        <result column="corp_name" property="corpName"/>
+        <collection property="roleTitleList" ofType="java.lang.String"
+                    select="net.fangfa.cnpc.auth.sys.dao.SysRoleDao.listRoleTitleByUserId" column="id"/>
+    </resultMap>
+
+
+    <sql id="tableName">
+        sys_user
+    </sql>
+
+    <sql id="columns">
+                ad_account,
+                email,
+                mobile,
+                password,
+                status,
+                create_time,
+                update_time,
+                user_id,
+                username,
+                corp_id,
+                headship,
+                enabled,
+                memo,
+                is_admin,
+                level,
+                work_time,
+                sex,
+                corp_name
+    </sql>
+
+    <sql id="columnsWithId">
+        id,
+        <include refid="columns"/>
+    </sql>
+
+    <sql id="entities">
+                #{adAccount},
+                #{email},
+                #{mobile},
+                #{password},
+                #{status},
+                #{createTime},
+                #{updateTime},
+                #{userId},
+                #{username},
+                #{corpId},
+                #{headship},
+                #{enabled},
+                #{memo},
+                #{isAdmin},
+                #{level},
+                #{workTime},
+                #{sex},
+                #{corpName}
+    </sql>
+
+    <sql id="entitiesWithId">
+        #{id},
+        <include refid="entities"/>
+    </sql>
+
+    <insert id="save" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO
+        <include refid="tableName"/>
+        (
+        <include refid="columns"/>
+        )
+        VALUES
+        (
+        <include refid="entities"/>
+        )
+    </insert>
+
+    <update id="update" parameterType="com.greelee.auth.model.SysUserDO">
+        UPDATE
+        <include refid="tableName"/>
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="adAccount != null and adAccount != ''">
+                ad_account=#{adAccount},
+            </if>
+            <if test="email != null and email != ''">
+                email=#{email},
+            </if>
+            <if test="mobile != null and mobile != ''">
+                mobile=#{mobile},
+            </if>
+            <if test="password != null and password != ''">
+                password=#{password},
+            </if>
+            <if test="status != null">
+                status=#{status},
+            </if>
+            <if test="updateTime != null">
+                update_time=#{updateTime},
+            </if>
+            <if test="userId != null and userId != ''">
+                user_id=#{userId},
+            </if>
+            <if test="username != null and username != ''">
+                username=#{username},
+            </if>
+            <if test="corpId != null">
+                corp_id=#{corpId},
+            </if>
+            <if test="headship != null and headship != ''">
+                headship=#{headship},
+            </if>
+            <if test="enabled != null and enabled != ''">
+                enabled=#{enabled},
+            </if>
+            <if test="memo != null and memo != ''">
+                memo=#{memo},
+            </if>
+            <if test="isAdmin != null and isAdmin != ''">
+                is_admin=#{isAdmin},
+            </if>
+            <if test="level != null and level != ''">
+                level=#{level},
+            </if>
+            <if test="workTime != null and workTime != ''">
+                work_time=#{workTime},
+            </if>
+            <if test="sex != null and sex != ''">
+                sex=#{sex},
+            </if>
+            <if test="corpName != null and corpName != ''">
+                corp_name=#{corpName}
+            </if>
+        </trim>
+        WHERE
+        id = #{id}
+    </update>
+
+    <update id="updateCorpInfoByDO" parameterType="com.greelee.auth.model.SysUserDO">
+        UPDATE
+        <include refid="tableName"/>
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="updateTime != null">
+                update_time=#{updateTime},
+            </if>
+            <if test="corpId != null">
+                corp_id=#{corpId},
+            </if>
+            <if test="corpName != null and corpName != ''">
+                corp_name=#{corpName},
+            </if>
+        </trim>
+        WHERE
+        id = #{id}
+    </update>
+
+    <update id="updateSelfInfo" parameterType="com.greelee.auth.model.SysUserDO">
+        UPDATE
+        <include refid="tableName"/>
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="updateTime != null">
+                update_time=#{updateTime},
+            </if>
+            <if test="username != null and username != ''">
+                username=#{username},
+            </if>
+            <if test="memo != null and memo != ''">
+                memo=#{memo},
+            </if>
+            <if test="sex != null and sex != ''">
+                sex=#{sex},
+            </if>
+        </trim>
+        WHERE
+        id = #{id}
+    </update>
+
+    <update id="updateCorpNameByCorpId">
+        UPDATE
+        <include refid="tableName"/>
+        SET
+        corp_name = #{corpName}
+        WHERE
+        corp_id = #{corpId}
+    </update>
+
+    <update id="deleteById">
+        UPDATE
+        <include refid="tableName"/>
+        SET
+        status = 2
+        WHERE
+        id = #{id}
+    </update>
+
+    <update id="deleteByIds">
+        UPDATE
+        <include refid="tableName"/>
+        SET
+        status = 2
+        <where>
+            id IN
+            <foreach collection="ids" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </where>
+    </update>
+
+    <update id="reuseByEmail">
+        UPDATE
+        <include refid="tableName"/>
+        SET
+        status = 1
+        WHERE
+        email = #{email}
+    </update>
+
+    <select id="getById" resultMap="commonMap">
+        SELECT
+        <include refid="columnsWithId"/>
+        FROM
+        <include refid="tableName"/>
+        WHERE
+        id = #{id}
+    </select>
+
+    <select id="list" resultMap="commonMap">
+        SELECT
+        <include refid="columnsWithId"/>
+        FROM
+        <include refid="tableName"/>
+        <include refid="queryCondition"/>
+    </select>
+
+    <select id="listVO" resultMap="sysUserVOMap">
+        SELECT
+        <include refid="columnsWithId"/>
+        FROM
+        <include refid="tableName"/>
+        <include refid="queryCondition"/>
+    </select>
+
+    <sql id="queryCondition">
+        <trim prefix="where" prefixOverrides="and">
+            <if test="query != null">
+                <if test="query.status != null and query.status > 0">
+                    and status = #{query.status}
+                </if>
+            </if>
+        </trim>
+    </sql>
+
+    <select id="count" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM sys_user
+    </select>
+
+    <select id="getByAdAccount" resultMap="commonMap">
+        SELECT
+        <include refid="columnsWithId"/>
+        FROM
+        <include refid="tableName"/>
+        WHERE
+        ad_account = #{adAccount}
+    </select>
+
+    <select id="getByMobile" resultMap="commonMap">
+        SELECT
+        <include refid="columnsWithId"/>
+        FROM
+        <include refid="tableName"/>
+        WHERE
+        mobile = #{mobile}
+    </select>
+
+    <select id="getByUsername" resultMap="commonMap">
+        SELECT
+        <include refid="columnsWithId"/>
+        FROM
+        <include refid="tableName"/>
+        WHERE
+        username = #{username}
+    </select>
+
+    <select id="getByEmail" resultMap="commonMap">
+        SELECT
+        <include refid="columnsWithId"/>
+        FROM
+        <include refid="tableName"/>
+        WHERE
+        email = #{email}
+    </select>
+
+    <select id="isExistByAdAccount" resultType="java.lang.Boolean">
+        SELECT ISNULL(
+        (
+        SELECT TOP(1) 1 FROM
+        <include refid="tableName"/>
+        WHERE
+        ad_account = #{adAccount}
+        ),0)
+    </select>
+
+    <select id="isExistByEmail" resultType="java.lang.Boolean">
+        SELECT ISNULL(
+        (
+        SELECT TOP(1) 1 FROM
+        <include refid="tableName"/>
+        WHERE
+        email = #{email}
+        ),0)
+    </select>
+
+    <select id="isExistById" resultType="java.lang.Boolean">
+        SELECT ISNULL(
+        (
+        SELECT TOP(1) 1 FROM
+        <include refid="tableName"/>
+        WHERE
+        id = #{id}
+        ),0)
+    </select>
+
+    <select id="isExistByMobile" resultType="java.lang.Boolean">
+        SELECT ISNULL(
+        (
+        SELECT TOP(1) 1 FROM
+        <include refid="tableName"/>
+        WHERE
+        mobile = #{mobile}
+        ),0)
+    </select>
+
+    <select id="isExistByUserId" resultType="java.lang.Boolean">
+        SELECT ISNULL(
+        (
+        SELECT TOP(1) 1 FROM
+        <include refid="tableName"/>
+        WHERE
+        user_id = #{userId}
+        ),0)
+    </select>
+
+    <select id="isExistByOrganizationId" resultType="java.lang.Boolean">
+        SELECT ISNULL(
+                       (
+                           SELECT 1
+                           FROM sys_user
+                                    LEFT JOIN
+                                sys_organization
+                                ON
+                                    sys_user.corp_id = sys_organization.corp_id
+                           WHERE sys_organization.id = #{organizationId}
+                       ), 0)
+    </select>
+</mapper>

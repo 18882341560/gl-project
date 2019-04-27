@@ -1,0 +1,39 @@
+spring:
+  profiles:
+    active: @profiles.active@
+  #activiti
+  activiti:
+    #不检查processes包
+    check-process-definitions: false
+    #配置日志级别  有4个级别  none activity audit（默认） full
+    history-level: full
+  # 禁用 jpa 视图
+  jpa:
+    open-in-view: false
+
+project:
+  project-package: com.greelee.sysmain
+  name: gl-priject
+# mybatis
+mybatis:
+  configuration:
+    # 关闭侵入式延迟加载,字段按需加载
+    aggressive-lazy-loading: false
+    # 开启延迟加载,提高性能
+    lazy-loading-enabled: true
+    # 下划线与驼峰映射
+    map-underscore-to-camel-case: true
+  # 根据不同项目进行配置
+  mapper-locations:
+    - classpath*:mapper/mysql/log/*.xml
+    - classpath*:mapper/mysql/message/*.xml
+    - classpath*:mapper/mysql/upload/*.xml
+    - classpath*:mapper/mysql/auth/*.xml
+    - classpath*:mapper/mysql/workflow/*.xml
+    - classpath:mapper/mysql/*/*.xml
+#  config-location: classpath:mybatis/config.xml
+
+# pagehelper
+pagehelper:
+  params: pageNum=page;pageSize=pageSize
+  reasonable: true

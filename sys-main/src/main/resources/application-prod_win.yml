@@ -1,0 +1,94 @@
+spring:
+  datasource:
+    password: kDEcCmV6+nTWVWL5BmNhCRqfdeeLFi50ze1a4Bg8VccQ8ixGS10XhTlWtw6V/3T3EcjILjb3Wkvax3H+e0G7bg==
+    url: jdbc:sqlserver://192.168.0.99:1433;database=train_system
+    username: sqm
+    druid:
+      connection-properties: clientEncoding=UTF-8;config.decrypt=true;config.decrypt.key=${project.druid-public-key}
+      filter:
+        config:
+          enabled: true
+        stat:
+          enabled: true
+          log-slow-sql: true
+        wall:
+          config:
+            alter-table-allow: false
+            create-table-allow: false
+            drop-table-allow: false
+            intersect-allow: false
+            minus-allow: false
+            select-all-column-allow: true
+            truncate-allow: false
+          enabled: true
+          log-violation: false
+          throw-exception: true
+      filters: stat,wall,config
+      initial-size: 10
+      max-active: 100
+      max-wait: 10000
+      min-idle: 3
+      remove-abandoned: true
+      remove-abandoned-timeout: 180
+      stat-view-servlet:
+        login-password: admin
+        login-username: admin
+        reset-enable: false
+  mvc:
+    static-path-pattern: /static/**
+  redis:
+    database: 0
+    host: 192.168.0.97
+    lettuce:
+      pool:
+        max-active: 10
+        max-idle: 10
+    password: sqm8848007
+    port: 6379
+    timeout: 0
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  task:
+    scheduling:
+      pool:
+        size: 10
+      thread-name-prefix: scheduling-
+
+
+fangfa:
+  cnpc:
+    auth:
+      audience: springbootdemo
+      jwt-time-to-live: ${project.session-timeout}
+      work-we-chat:
+        corp-id: ww7c85cc7dbb47afde
+        corp-secret: 3BZsYl-TaPaHS9uMk2O3MQ2gt6mQ-2P-x_o50KkAv2k
+        http: http
+        intranet: false
+        request-access-token: false
+  log:
+    write-to-data-base: true
+  upload:
+    upload-file-dir: /Users/songqiming/resource/f
+    upload-file-url: http://192.168.0.97:9090/f
+logging:
+  file: log/log.log
+  level:
+    net:
+      fangfa: debug
+    root: info
+project:
+  contact-email: admin@fangfa.net
+  contact-name: fangfa
+  contact-url: http://www.fangfa.net
+  description: spring-boot-demo
+  druid-public-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKzW/uRgE61ZMFTViMjkJT2v67d4WJ/1UluAbqh/0E28Ji3EBCMxBKm0Ib3iN0TqguDuMbD3FHMOOiCDS28JBdUCAwEAAQ==
+  ehcache-classpath: cache/ehcache.xml
+  enable-swagger: false
+  session-timeout: 3600000
+  terms-of-service-url: http://192.168.0.97:${server.port}
+  version: 1.0.1
+server:
+  port: 8081

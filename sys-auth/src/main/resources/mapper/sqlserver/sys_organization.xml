@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.greelee.auth.dao.SysOrganizationDao">
+    <resultMap type="com.greelee.auth.model.SysOrganizationDO" id="commonMap">
+        <result column="id" property="id"/>
+        <result column="corp_id" property="corpId"/>
+        <result column="corp_name" property="corpName"/>
+        <result column="parent_corp_id" property="parentCorpId"/>
+        <result column="seq" property="seq"/>
+        <result column="corp_manager" property="corpManager"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <sql id="tableName">
+        sys_organization
+    </sql>
+
+    <sql id="columns">
+        corp_id,
+        corp_name,
+        parent_corp_id,
+        seq,
+        corp_manager,
+        create_time,
+        update_time
+    </sql>
+
+    <sql id="columnsWithId">
+        id,
+        <include refid="columns"/>
+    </sql>
+
+    <sql id="entities">
+        #{corpId},
+        #{corpName},
+        #{parentCorpId},
+        #{seq},
+        #{corpManager},
+        #{createTime},
+        #{updateTime}
+    </sql>
+
+    <sql id="entitiesWithId">
+        #{id},
+        <include refid="entities"/>
+    </sql>
+
+    <insert id="save" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO
+        <include refid="tableName"/>
+        (
+        <include refid="columns"/>
+        )
+        VALUES
+        (
+        <include refid="entities"/>
+        )
+    </insert>
+
+    <update id="update" parameterType="com.greelee.auth.model.SysOrganizationDO">
+        UPDATE
+        <include refid="tableName"/>
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="corpId != null">
+                corp_id=#{corpId},
+            </if>
+            <if test="corpName != null and corpName != ''">
+                corp_name=#{corpName},
+            </if>
+            <if test="parentCorpId != null">
+                parent_corp_id=#{parentCorpId},
+            </if>
+            <if test="seq != null">
+                seq=#{seq},
+            </if>
+            <if test="corpManager != null and corpManager != ''">
+                corp_manager=#{corpManager},
+            </if>
+            <if test="updateTime != null">
+                update_time=#{updateTime}
+            </if>
+        </trim>
+        WHERE
+        id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM
+        <include refid="tableName"/>
+        WHERE
+        id = #{id}
+    </delete>
+
+    <select id="list" resultMap="commonMap">
+        SELECT
+        <include refid="columnsWithId"/>
+        FROM
+        <include refid="tableName"/>
+    </select>
+
+    <select id="listByParentCorpId" resultMap="commonMap">
+        SELECT
+        <include refid="columnsWithId"/>
+        FROM
+        <include refid="tableName"/>
+        WHERE
+        parent_corp_id = #{parentCorpId}
+    </select>
+
+    <select id="getById" resultMap="commonMap">
+        SELECT
+        <include refid="columnsWithId"/>
+        FROM
+        <include refid="tableName"/>
+        WHERE
+        id = #{id}
+    </select>
+
+    <select id="isExistByCorpId" resultType="java.lang.Boolean">
+        SELECT ISNULL(
+        (
+        SELECT TOP(1) 1 from
+        <include refid="tableName"/>
+        WHERE
+        corp_id = #{corpId}
+        ),0)
+    </select>
+    <select id="isExistByParentCorpId" resultType="java.lang.Boolean">
+        SELECT ISNULL(
+        (
+        SELECT TOP(1) 1 from
+        <include refid="tableName"/>
+        WHERE
+        parent_corp_id = #{parentCorpId}
+        ),0)
+    </select>
+
+</mapper>
